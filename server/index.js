@@ -1,5 +1,5 @@
 const mongodb = require('mongodb');
-const { MongoClient, ObjectId } = mongodb;
+const { MongoClient } = mongodb;
 const express = require('express');
 const bodyParser = require('body-parser');
 const {graphqlExpress, graphiqlExpress} = require('graphql-server-express');
