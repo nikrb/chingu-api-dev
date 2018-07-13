@@ -28,14 +28,18 @@ const resolvers = (db) => {
         return id2String(res[0]);
       },
       users: async () => (await Users.find({}).toArray()).map(id2String),
-      standups: async (root, { user_id }) => {
+      standups: async (root, { username }) => {
+        const user = await Users.find({ username }).limit(1).toArray();
+        const user_id = user[0]._id.toString();
         console.log('find standups user_id:', user_id);
         const res = (await Standups.find({ user_id }).toArray()).map(id2String);
-        console.log('standups list:', res);
         return res;
       },
       country: async (root, { id }) => {
-        const res = await Countries.find({ _id: ObjectId(id) }).limit(1).toArray();
+        const res = await Countries
+          .find({ _id: ObjectId(id) })
+          .limit(1)
+          .toArray();
         return id2String(res[0]);
       },
       countries: async () => (await Countries.find({}).toArray()).map(id2String),
@@ -55,7 +59,10 @@ const resolvers = (db) => {
     Mutation: {
       createStandup: async (root, args) => {
         console.log('create standup args:', args);
-        const res = await Standups.insertOne({...args.standup_data});
+        const res = await Standups.insertOne({
+          ...args.standup_data,
+          created: Date()
+        });
         const new_id = res.insertedId;
         Standups.updateOne({ _id: ObjectId(new_id)}, {$set: { id: new_id }});
         return id2String(res.ops[0]);
