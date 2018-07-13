@@ -5,7 +5,7 @@ const typeDefs = `
     currentUserQuery: User
     user(username: String): User
     users: [User]
-    standups(user_id: ID): [Standup]
+    standups(username: String): [Standup]
     post(_id: String): Post
     posts: [Post]
     comment(_id: String): Comment
@@ -20,6 +20,9 @@ const typeDefs = `
     country_id: ID
   }
   type Standup {
+    _id: String
+    id: ID
+    created: String
     user_id: ID
     have_done: String
     will_do: String
